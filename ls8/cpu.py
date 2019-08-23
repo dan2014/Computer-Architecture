@@ -182,7 +182,7 @@ class CPU:
     # ALU OPS
     def ADD(self,*args):
         registerA,registerB = args[0], args[1]
-        val = registerA + registerB
+        val = self.reg[registerA] + self.reg[registerB]
 
         if val > 255:
             print("WARNING! INTEGER OVERFLOW")
@@ -191,7 +191,7 @@ class CPU:
             self.reg[registerA] = val
     def SUB(self,*args):
         registerA,registerB = args[0], args[1]
-        val = registerA - registerB
+        val = self.reg[registerA] - self.reg[registerB]
 
         if val < 0:
             print("WARNING! INTEGER OVERFLOW")
@@ -201,7 +201,7 @@ class CPU:
 
     def MUL(self,*args):
         registerA,registerB = args[0], args[1]
-        val = registerA * registerB
+        val = self.reg[registerA] * self.reg[registerB]
 
         if val > 255:
             print("WARNING! INTEGER OVERFLOW")
@@ -211,16 +211,34 @@ class CPU:
         
     def DIV(self,*args):
         registerA,registerB = args[0], args[1]
-        val = registerA / registerB
         
+        if self.reg[registerB] == 0:
+            print("WARNING! CAN'T DIVIDE BY ZERO")
+            print("PROGRAM EXITING")
+            sys.exit()
+
+        val = self.reg[registerA] / self.reg[registerB]
         if val < 0:
             print("WARNING! INTEGER OVERFLOW")
             self.reg[registerA] = 0
         else:
-            self.reg[registerA] = registerA // registerB
+            self.reg[registerA] = self.reg[registerA] // self.reg[registerB]
 
     def MOD(self,*args):
-        pass
+        registerA,registerB = args[0], args[1]
+        
+        if self.reg[registerB] == 0:
+            print("WARNING! CAN'T DIVIDE BY ZERO")
+            print("PROGRAM EXITING")
+            sys.exit()
+
+        val = self.reg[registerA] / self.reg[registerB]
+        if val < 0:
+            print("WARNING! INTEGER OVERFLOW")
+            self.reg[registerA] = 0
+        else:
+            self.reg[registerA] = self.reg[registerA] % self.reg[registerB]
+
     def INC(self,*args):
         pass
     def DEC(self,*args):
